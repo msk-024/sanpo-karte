@@ -24,6 +24,15 @@
 .DS_Store
 *.pem
 
+# AI tools (personal dev config)
+.claudeignore
+
+# Draft articles (publish separately when ready)
+BLOG.md
+
+# Personal design notes
+DESIGN.md
+
 # IDE
 .vscode/
 
