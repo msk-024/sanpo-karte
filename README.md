@@ -1,36 +1,149 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# さんぽかるて
 
-## Getting Started
+**産業看護職のためのAI健康管理アシスタント**
 
-First, run the development server:
+産業保健師・産業看護師が、従業員一人ひとりの健康を継続的にフォローするための記録・管理・AI支援ツールです。
+
+---
+
+## デモ
+
+> 🚧 デモURL（公開後に追記予定）
+
+---
+
+## 主な機能
+
+- **従業員カルテ** — 健診結果・面談履歴・基本情報を1ページに集約
+- **健診結果管理** — 手入力 または Claude Vision APIによる健診票スキャン自動入力
+- **面談記録** — 種別（定期/メンタル/受診勧奨後/その他）・内容・方針を記録
+- **AI文書生成** — 面談案内・受診勧奨・ストレスチェック案内などをAIが自動生成
+- **レポート** — 判定分布・年度推移・要フォロー者一覧をダッシュボードで可視化
+- **設定** — 担当者名・事業所名・アラート閾値のカスタマイズ
+
+---
+
+## 技術スタック
+
+| 項目 | 内容 |
+|---|---|
+| フロントエンド | Next.js 15 / TypeScript |
+| スタイリング | CSS カスタムプロパティ（独自デザインシステム） |
+| バックエンド | Supabase（PostgreSQL / RLS） |
+| AI | Google Gemini API（gemini-2.0-flash：文書生成・健診票スキャン） |
+| デプロイ | Vercel |
+
+---
+
+## 今後の展望
+
+- ログイン・認証機能（Supabase Auth）
+- ストレスチェック結果の取り込み
+- 復職支援記録・就業配慮事項の管理
+- 健診文書のセキュアなアーカイブ
+- **メール送信連携** — 生成した案内文を従業員の会社メールアドレスへ直接送信（Exchange / Google Workspace 等との連携）
+
+---
+
+## セットアップ
+
+### 1. リポジトリのクローン
+
+```bash
+git clone https://github.com/（リポジトリURL）
+cd sanpo-karte
+npm install
+```
+
+### 2. 環境変数の設定
+
+`.env.local` を作成し、以下を設定してください。
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+GEMINI_API_KEY=your_gemini_api_key
+```
+
+> **Gemini APIキーの取得（無料）**
+> [Google AI Studio](https://aistudio.google.com/app/apikey) にアクセス → 「APIキーを作成」
+> クレジットカード不要。無料枠：15回/分・100万token/日
+
+### 3. Supabaseのセットアップ
+
+```bash
+# マイグレーションを実行
+supabase db push
+
+# （任意）開発用シードデータを投入
+supabase db reset
+```
+
+### 4. 開発サーバーの起動
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+[http://localhost:3000](http://localhost:3000) で動作確認できます。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ⚠️ 免責事項・ご利用上の注意
 
-## Learn More
+### このアプリはプロトタイプです
 
-To learn more about Next.js, take a look at the following resources:
+本アプリは**業務フローや機能を検証するための個人開発プロトタイプ（試作品）**です。
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+職場での本格運用を目的として設計されていますが、**現時点では以下の理由から実務への直接投入は推奨しません。**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| 項目 | 現状 |
+|------|------|
+| ログイン・認証 | 未実装（誰でもアクセス可能） |
+| データ保管先 | Supabase（米国サーバー） |
+| AI処理先 | Anthropic API（米国サーバー） |
+| セキュリティ審査 | 未実施 |
+| ログイン・監査ログ | なし |
 
-## Deploy on Vercel
+**推奨する使い方：** 機能・操作感の検証、社内提案のデモ、個人的な学習・研究目的
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 会社での利用に関する重要な注意
+
+「個人で使うだけだから問題ない」とはなりません。本アプリが扱う情報は**他人（従業員）の要配慮個人情報**であり、使用者個人の判断で外部サービスに保存・処理することは、以下のリスクを伴います。
+
+- **個人情報保護法** — 健診結果・面談記録は「要配慮個人情報」（第2条3項）に該当。取得・利用には従業員の同意が必要
+- **会社の情報セキュリティポリシー** — クラウドサービスへのデータ持ち出しは多くの組織で申請・承認が必要
+- **労働安全衛生法** — 健診情報の管理方法は法令で定められており、外部委託には要件がある
+- **AIへの個人情報送信** — 文書生成・スキャン機能では従業員情報がAnthropic社のAPIに送信される
+
+職場での利用にあたっては、**IT部門・法務・管理職の承認を経た上で、従業員への説明と同意を必ず行ってください。**
+
+### 個人情報・医療情報の取り扱いについて
+
+- 本アプリの利用によって生じたいかなる損害についても、開発者は責任を負いません
+- データの保管・管理・廃棄については、組織のセキュリティポリシーに従ってください
+
+### AI生成コンテンツについて
+
+- AI（Claude）が生成した文書は**必ず人間が内容を確認・修正してから**使用してください
+- 生成内容の正確性・適切性は保証されません
+- 医療判断の代替としては使用しないでください
+
+### AI APIのトークン制限について
+
+- 本アプリのAI機能にはGoogle Gemini APIを使用しています
+- 無料枠の制限（15回/分・100万token/日）に達した場合、一時的にエラーが発生します
+- 無料枠内での利用であれば**料金は発生しません**
+- セルフホストの場合は [Google AI Studio](https://aistudio.google.com/app/apikey) で各自のAPIキーをご用意ください
+
+---
+
+## ライセンス
+
+MIT License — 詳細は [LICENSE](LICENSE) を参照してください。
+
+---
+
+*開発者：臨床看護師・産業保健経験者 / フルスタック開発学習中*

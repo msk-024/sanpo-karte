@@ -49,6 +49,24 @@
 }
 
 :root {
+  /* さんぽかるて カスタムカラー */
+  --color-danger: #E24B4A;
+  --color-danger-bg: #FCEBEB;
+  --color-warning: #EF9F27;
+  --color-warning-bg: #FAEEDA;
+  --color-success: #639922;
+  --color-success-bg: #EAF3DE;
+  --color-b-rank: #D85A30;
+  --color-b-rank-bg: #FAECE7;
+  --color-info: #378ADD;
+  --color-info-bg: #E6F1FB;
+  --color-text-info: #378ADD;
+  --color-background-info: #E6F1FB;
+  --color-background-primary: var(--background);
+  --color-background-secondary: var(--secondary);
+  --color-border-tertiary: oklch(0.922 0 0);
+  --border-radius-lg: var(--radius-lg);
+
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
