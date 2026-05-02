@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { createClient } from "@/lib/supabase";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
 import DonutChart from "../_components/DonutChart";
 import DeptBreakdown, { type DeptRow } from "./_components/DeptBreakdown";
 import YearTrend, { type YearRow } from "./_components/YearTrend";
@@ -14,7 +14,7 @@ const card = CARD_STYLE;
 const sectionTitle = SECTION_TITLE_STYLE;
 
 export default async function ReportsPage() {
-  const supabase = createClient();
+  const supabase = await createServerSupabaseClient();
 
   const [{ data: employees }, { data: healthChecks }, { data: interviews }] =
     await Promise.all([

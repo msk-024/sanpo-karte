@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createClient } from "@/lib/supabase";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
 
 export type AddStressCheckState = { error: string } | { success: true } | null;
 
@@ -24,7 +24,7 @@ export async function addStressCheck(
     return { error: "結果区分を選択してください" };
   }
 
-  const supabase = createClient();
+  const supabase = await createServerSupabaseClient();
   const { error } = await supabase.from("stress_checks").insert({
     employee_id: employeeId,
     check_year: checkYear,

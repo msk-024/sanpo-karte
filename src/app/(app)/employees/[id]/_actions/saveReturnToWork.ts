@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createClient } from "@/lib/supabase";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
 
 export type SaveReturnToWorkState = { error: string } | { success: true } | null;
 
@@ -44,7 +44,7 @@ export async function saveReturnToWork(
     updated_at: new Date().toISOString(),
   };
 
-  const supabase = createClient();
+  const supabase = await createServerSupabaseClient();
 
   if (recordId) {
     const { error } = await supabase

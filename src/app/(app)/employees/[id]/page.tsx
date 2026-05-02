@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { createClient } from "@/lib/supabase";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
 import JudgmentBadge from "../_components/JudgmentBadge";
 import HealthCheckTable from "./_components/HealthCheckTable";
 import AddHealthCheckForm from "./_components/AddHealthCheckForm";
@@ -17,7 +17,7 @@ type Props = { params: Promise<{ id: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const supabase = createClient();
+  const supabase = await createServerSupabaseClient();
   const { data } = await supabase
     .from("employees")
     .select("name")
@@ -58,7 +58,7 @@ const sectionTitle: React.CSSProperties = {
 
 export default async function EmployeeDetailPage({ params }: Props) {
   const { id } = await params;
-  const supabase = createClient();
+  const supabase = await createServerSupabaseClient();
 
   const [
     { data: emp, error: empError },

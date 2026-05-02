@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createClient } from "@/lib/supabase";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
 
 export type AddInterviewState = { error: string } | { success: true } | null;
 
@@ -27,7 +27,7 @@ export async function addInterview(
     return { error: "面談内容は必須です" };
   }
 
-  const supabase = createClient();
+  const supabase = await createServerSupabaseClient();
   const { error } = await supabase.from("interviews").insert({
     employee_id: employeeId,
     interviewed_at: interviewedAt,

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
 import HealthCheckList, { type HealthCheckRecord } from "./_components/HealthCheckList";
 
 export const metadata: Metadata = {
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 export default async function HealthPage() {
-  const supabase = createClient();
+  const supabase = await createServerSupabaseClient();
 
   const { data, error } = await supabase
     .from("health_checks")

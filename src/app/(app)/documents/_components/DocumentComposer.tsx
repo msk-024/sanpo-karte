@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { DocType } from "@/app/api/generate/route";
-import { loadSettings, type AppSettings } from "@/app/settings/_components/SettingsForm";
+import { loadSettings, type AppSettings } from "@/app/(app)/settings/_components/SettingsForm";
 import { saveToHistory, loadHistory, type DocHistoryItem } from "@/lib/docHistory";
 
 export type EmployeeOption = {

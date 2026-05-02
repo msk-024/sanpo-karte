@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { createClient } from "@/lib/supabase";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
 import DocumentComposer, { type EmployeeOption } from "./_components/DocumentComposer";
 
 export const metadata: Metadata = {
@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 };
 
 export default async function DocumentsPage() {
-  const supabase = createClient();
+  const supabase = await createServerSupabaseClient();
 
   const [{ data: empData }, { data: ivData }] = await Promise.all([
     supabase

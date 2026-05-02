@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { employeeSchema } from "@/lib/schemas/employee";
 
 export type CreateEmployeeState = { error: string } | null;
@@ -27,7 +27,14 @@ export async function createEmployee(
 
   const { name, name_kana, department, birth_date, gender } = parsed.data;
 
-  const supabase = createClient();
+  const supabase = await createServerSupabaseClient();
+
+  // ログイン中のユーザーIDを取得（RLSで自分のデータとして登録するために必要）
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    return { error: "ログインが必要です。" };
+  }
+
   const { data, error } = await supabase
     .from("employees")
     .insert({
@@ -36,12 +43,12 @@ export async function createEmployee(
       department: department || null,
       birth_date: birth_date || null,
       gender: gender || null,
+      user_id: user.id,
     })
     .select("id")
     .single();
 
   if (error || !data) {
-    console.error("[createEmployee]", error?.message);
     return { error: "登録に失敗しました。時間をおいて再度お試しください。" };
   }
 

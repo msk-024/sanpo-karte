@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
 import GreetingBar from "./_components/GreetingBar";
 import DonutChartsRow, { type ChartData } from "./_components/DonutChartsRow";
 import TodaySchedule, { type Interview } from "./_components/TodaySchedule";
@@ -21,7 +21,7 @@ const TYPE_LABELS: Record<string, string> = {
 };
 
 export default async function Home() {
-  const supabase = createClient();
+  const supabase = await createServerSupabaseClient();
   const now = new Date();
   const today = now.toISOString().split("T")[0];
 

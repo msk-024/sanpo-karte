@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { createClient } from "@/lib/supabase";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
 import InterviewRecordList, { type InterviewRecord } from "./_components/InterviewRecordList";
 
 export const metadata: Metadata = {
@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 };
 
 export default async function InterviewsPage() {
-  const supabase = createClient();
+  const supabase = await createServerSupabaseClient();
 
   const { data, error } = await supabase
     .from("interviews")

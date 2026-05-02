@@ -71,12 +71,17 @@ function Field({ label, hint, children }: { label: string; hint?: string; childr
 // ── メインコンポーネント ──────────────────────────────
 
 export default function SettingsForm() {
+  // SSR/クライアント不一致を防ぐため初期値は DEFAULT_SETTINGS、
+  // マウント後に localStorage から読み込む
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
   const [mounted, setMounted] = useState(false);
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    setSettings(loadSettings());
+    // マウント後に一度だけ実行（localStorage は SSR で使えないため）
+    const loaded = loadSettings();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setSettings(loaded);
     setMounted(true);
   }, []);
 

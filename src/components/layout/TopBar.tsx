@@ -1,6 +1,20 @@
 import Link from "next/link";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
+import { signOut } from "@/app/(app)/_actions/signOut";
 
-export default function TopBar() {
+/**
+ * TopBar（Server Component）
+ * ログイン中のユーザーのメールアドレスとログアウトボタンを表示する。
+ */
+export default async function TopBar() {
+  const supabase = await createServerSupabaseClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // メールアドレスから表示名を生成（例: nurse@example.com → nurse）
+  const displayName = user?.email?.split("@")[0] ?? "";
+
   return (
     <header
       style={{
@@ -30,37 +44,29 @@ export default function TopBar() {
         </span>
       </Link>
 
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "8px",
-        }}
-      >
-        <span
-          style={{
-            fontSize: "13px",
-            color: "var(--muted-foreground)",
-          }}
-        >
-          保健師 太郎
+      <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        {/* ログイン中のユーザー名 */}
+        <span style={{ fontSize: "13px", color: "var(--muted-foreground)" }}>
+          {displayName}
         </span>
-        <div
-          style={{
-            width: "30px",
-            height: "30px",
-            borderRadius: "50%",
-            background: "var(--color-background-info)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "13px",
-            fontWeight: 600,
-            color: "var(--color-text-info)",
-          }}
-        >
-          保
-        </div>
+
+        {/* ログアウトボタン（Server Actionをformで呼ぶ） */}
+        <form action={signOut}>
+          <button
+            type="submit"
+            style={{
+              fontSize: "12px",
+              padding: "4px 10px",
+              borderRadius: "5px",
+              border: "1px solid var(--color-border-tertiary)",
+              background: "transparent",
+              color: "var(--muted-foreground)",
+              cursor: "pointer",
+            }}
+          >
+            ログアウト
+          </button>
+        </form>
       </div>
     </header>
   );
